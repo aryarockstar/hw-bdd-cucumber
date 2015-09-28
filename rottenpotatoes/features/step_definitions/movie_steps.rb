@@ -12,9 +12,9 @@ end
 #   on the same page
 
 Then /I should see "(.*)" before "(.*)"/ do |e1, e2|
+  page.body =~ /#{e1}.+#{e2}/m
   #  ensure that that e1 occurs before e2.
   #  page.body is the entire content of the page as a string.
-  fail "Unimplemented"
 end
 
 # Make it easier to express checking or unchecking several boxes at once
@@ -23,9 +23,13 @@ end
 
 When /I (un)?check the following ratings: (.*)/ do |uncheck, rating_list|
     if uncheck == "un"
-      rating_list.split(',').each { |val| step %{I uncheck "ratings_#{val}"}}
+      rating_list.split(',').each { |val|
+                                    step %{I uncheck "ratings_#{val}"}
+                                  }
     else
-      rating_list.split(',').each { |val| step %{I check "ratings_#{val}"}}
+      rating_list.split(',').each { |val| 
+                                    step %{I check "ratings_#{val}"}
+                                  }
     end
 # HINT: use String#split to split up the rating_list, then
   #   iterate over the ratings and reuse the "When I check..." or
